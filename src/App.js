@@ -43,19 +43,24 @@ function App() {
 function SignIn() {
   const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    
-    // Ask for the user's username
-    const username = prompt('Enter your username:');
-    
-    // Sign in with Google and include the username as a custom parameter
+
+    // Sign in with Google
     const result = await auth.signInWithPopup(provider);
     const user = result.user;
-    
-    // Update the user's display name with the provided username
-    await user.updateProfile({
-      displayName: username,
-    });
-  }
+
+    // Check if a username is already set
+    if (!user.displayName) {
+      // Ask for the user's username if not set
+      const username = prompt('Enter your username:');
+
+      // Update the user's display name with the provided username
+      if (username) {
+        await user.updateProfile({
+          displayName: username,
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -88,12 +93,26 @@ function ChatRoom() {
 
     const { uid, photoURL, displayName } = auth.currentUser;
 
+    // Check if the username is set
+    if (!displayName) {
+      // Ask for the user's username if not set
+      const username = prompt('Enter your username:');
+
+      // Update the user's display name with the provided username
+      if (username) {
+        await auth.currentUser.updateProfile({
+          displayName: username,
+        });
+      }
+    }
+
+    // Now the username is guaranteed to be set
     await messagesRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       photoURL,
-      username: displayName, // Add the username to the message
+      username: displayName,
     });
 
     setFormValue('');

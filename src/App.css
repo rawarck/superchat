@@ -151,6 +151,8 @@ p {
   position: absolute;
   left: 0;
   transform: translateX(-100%);
+  width: 120%;
+  font-size: 12px;
 }
 
 .received p.username {
@@ -158,6 +160,8 @@ p {
   right: 0;
   transform: translateX(100%);
   color: white;
+  width: 120%;
+  font-size: 12px;
 }
 
 .received p.message {
