@@ -149,18 +149,24 @@ p {
 
 .sent p.username {
   position: absolute;
-  left: 0;
-  transform: translateX(-100%);
+  right: 0;
+  transform: translateX(-70%);
   width: 120%;
   font-size: 12px;
 }
 
+.received {
+  width: fit-content;
+  margin-right: auto;
+}
+
 .received p.username {
   position: absolute;
-  right: 0;
-  transform: translateX(100%);
+  left: 0;
+  transform: translateX(70%);
   color: white;
   width: 120%;
+  text-align: left;
   font-size: 12px;
 }
 
