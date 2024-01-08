@@ -41,18 +41,29 @@ function App() {
 }
 
 function SignIn() {
-
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+    
+    // Ask for the user's username
+    const username = prompt('Enter your username:');
+    
+    // Sign in with Google and include the username as a custom parameter
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+    
+    // Update the user's display name with the provided username
+    await user.updateProfile({
+      displayName: username,
+    });
   }
 
   return (
     <>
-      <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
+      <button className="sign-in" onClick={signInWithGoogle}>
+        Sign in with Google
+      </button>
     </>
-  )
-
+  );
 }
 
 function SignOut() {
@@ -75,14 +86,15 @@ function ChatRoom() {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    const { uid, photoURL } = auth.currentUser;
+    const { uid, photoURL, displayName } = auth.currentUser;
 
     await messagesRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
-      photoURL
-    })
+      photoURL,
+      username: displayName, // Add the username to the message
+    });
 
     setFormValue('');
     dummy.current.scrollIntoView({ behavior: 'smooth' });
@@ -109,14 +121,15 @@ function ChatRoom() {
 
 
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+  const { text, uid, photoURL, username } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (<>
     <div className={`message ${messageClass}`}>
       <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
-      <p>{text}</p>
+      <p className='username'>{username}</p>
+      <p className='message'>{text}</p>
     </div>
   </>)
 }

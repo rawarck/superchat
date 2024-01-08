@@ -83,7 +83,8 @@ input {
 }
 
 button {
-  background-color: #282c34; /* Green */
+  background-color: #282c34;
+  /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -110,7 +111,8 @@ button:disabled {
 
 
 
-ul, li {
+ul,
+li {
   text-align: left;
   list-style: none;
 }
@@ -129,19 +131,36 @@ p {
 .message {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 
 .sent {
   flex-direction: row-reverse;
+  width: fit-content;
+  margin-left: auto;
 }
 
-.sent p {
+.sent p.message {
   color: white;
   background: #0b93f6;
   align-self: flex-end;
 }
-.received p {
+
+.sent p.username {
+  position: absolute;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.received p.username {
+  position: absolute;
+  right: 0;
+  transform: translateX(100%);
+  color: white;
+}
+
+.received p.message {
   background: #e5e5ea;
   color: black;
 }
